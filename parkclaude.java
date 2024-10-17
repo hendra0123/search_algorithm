@@ -41,7 +41,7 @@ class ParkingLot {
     }
 }
 
-// Interface untuk algoritma pencarian
+
 // Interface untuk algoritma pencarian
 interface SearchAlgorithm {
     SearchResult findParkingSpot(ParkingLot parkingLot, int startX, int startY);
@@ -307,5 +307,3 @@ class SearchResult {
         this.maxSpaceComplexity = maxSpaceComplexity;
     }
 }
-
-// Implementasi A* Search, BFS, dan UCS perlu mengembalikan SearchResult dengan nilai-nilai space complexity, cost, dsb.
