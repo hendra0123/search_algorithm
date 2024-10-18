@@ -214,7 +214,7 @@ class UniformCostSearch implements SearchAlgorithm {
 
 
 // Kelas utama untuk menjalankan simulasi
-public class parkclaude {
+public class ParkingSolution {
     public static void runScenario(String scenarioName, ParkingLot parkingLot, int startX, int startY) {
         System.out.println("Scenario: " + scenarioName);
         System.out.println("Parking Lot Size: " + parkingLot.width + "x" + parkingLot.height);
