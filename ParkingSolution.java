@@ -197,7 +197,7 @@ public class ParkingSolution {
         printParkingLot(parkingLot);
 
         SearchAlgorithm[] algorithms = {
-            new DFSSearch(),  // Mengganti A* dengan DFS
+            new DFSSearch(),
             new BFSSearch(),
             new UniformCostSearch()
         };
