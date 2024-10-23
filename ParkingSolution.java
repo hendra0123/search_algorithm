@@ -48,60 +48,35 @@ interface SearchAlgorithm {
 }
 
 
-// Implementasi A* Search
-class AStarSearch implements SearchAlgorithm {
-    class Node implements Comparable<Node> {
-        ParkingSpot spot;
-        int g, h;
-        Node parent;
-
-        Node(ParkingSpot spot, int g, int h, Node parent) {
-            this.spot = spot;
-            this.g = g;
-            this.h = h;
-            this.parent = parent;
-        }
-
-        int f() { return g + h; }
-
-        @Override
-        public int compareTo(Node other) {
-            return Integer.compare(this.f(), other.f());
-        }
-    }
-
+class DFSSearch implements SearchAlgorithm {
     @Override
     public SearchResult findParkingSpot(ParkingLot parkingLot, int startX, int startY) {
-        PriorityQueue<Node> openList = new PriorityQueue<>();
-        Set<ParkingSpot> closedList = new HashSet<>();
+        Stack<ParkingSpot> stack = new Stack<>();
+        boolean[][] visited = new boolean[parkingLot.height][parkingLot.width];
         int maxSpaceComplexity = 0;
+        int cost = 0;
 
-        Node start = new Node(parkingLot.spots[startY][startX], 0, 0, null);
-        openList.add(start);
+        ParkingSpot start = parkingLot.spots[startY][startX];
+        stack.push(start);
+        visited[startY][startX] = true;
 
-        while (!openList.isEmpty()) {
-            maxSpaceComplexity = Math.max(maxSpaceComplexity, openList.size());
+        while (!stack.isEmpty()) {
+            maxSpaceComplexity = Math.max(maxSpaceComplexity, stack.size());
+            ParkingSpot current = stack.pop();
+            cost++;
 
-            Node current = openList.poll();
-
-            if (!current.spot.isOccupied) {
-                return new SearchResult(current.spot, current.g, maxSpaceComplexity);
+            if (!current.isOccupied) {
+                return new SearchResult(current, cost, maxSpaceComplexity);
             }
 
-            closedList.add(current.spot);
-
             for (int[] dir : new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}) {
-                int newX = current.spot.x + dir[0];
-                int newY = current.spot.y + dir[1];
+                int newX = current.x + dir[0];
+                int newY = current.y + dir[1];
 
-                if (newX >= 0 && newX < parkingLot.width && newY >= 0 && newY < parkingLot.height) {
+                if (newX >= 0 && newX < parkingLot.width && newY >= 0 && newY < parkingLot.height && !visited[newY][newX]) {
                     ParkingSpot neighbor = parkingLot.spots[newY][newX];
-                    if (!closedList.contains(neighbor)) {
-                        int g = current.g + 1;
-                        int h = Math.abs(newX - startX) + Math.abs(newY - startY);
-                        Node neighborNode = new Node(neighbor, g, h, current);
-                        openList.add(neighborNode);
-                    }
+                    stack.push(neighbor);
+                    visited[newY][newX] = true;
                 }
             }
         }
@@ -222,7 +197,7 @@ public class ParkingSolution {
         printParkingLot(parkingLot);
 
         SearchAlgorithm[] algorithms = {
-            new AStarSearch(),
+            new DFSSearch(),  // Mengganti A* dengan DFS
             new BFSSearch(),
             new UniformCostSearch()
         };
